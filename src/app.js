@@ -43,6 +43,10 @@ app.post("/repositories/:id/like", (request, response) => {
 
   const project = repositories.find(project => project.id === id);
 
+  if (!project) {
+    return response.status(400).json({ error: 'Project not found.'});
+  }
+
   project.likes++;
 
   return response.json(project);
