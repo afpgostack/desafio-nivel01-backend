@@ -34,26 +34,23 @@ app.put("/repositories/:id", (request, response) => {
   const { id } = request.params;
   const { title, url, techs } = request.body;
 
-  const project = repositories.find(project => project.id === id);
   const projectIndex = repositories.findIndex(project => project.id === id);
 
   if (projectIndex < 0) {
     return response.status(400).json({ error: 'Project not found.' });
   }
 
-  likes = project.likes;
-
-  const upProject = {
+  const Project = {
     id,
     title,
     url,
     techs,
-    likes,
+    likes: repositories[projectIndex].likes,
   };
 
-  repositories[projectIndex] = upProject;
+  repositories[projectIndex] = Project;
 
-  return response.json(upProject);
+  return response.json(Project);
 });
 
 app.delete("/repositories/:id", (request, response) => {
