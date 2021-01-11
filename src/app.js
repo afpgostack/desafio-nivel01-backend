@@ -31,7 +31,29 @@ app.post("/repositories", (request, response) => {
 });
 
 app.put("/repositories/:id", (request, response) => {
-  // TODO
+  const { id } = request.params;
+  const { title, url, techs } = request.body;
+
+  const project = repositories.find(project => project.id === id);
+  const projectIndex = repositories.findIndex(project => project.id === id);
+
+  if (projectIndex < 0) {
+    return response.status(400).json({ error: 'Project not found.' });
+  }
+
+  likes = project.likes;
+
+  const upProject = {
+    id,
+    title,
+    url,
+    techs,
+    likes,
+  };
+
+  repositories[projectIndex] = upProject;
+
+  return response.json(upProject);
 });
 
 app.delete("/repositories/:id", (request, response) => {
@@ -44,7 +66,7 @@ app.post("/repositories/:id/like", (request, response) => {
   const project = repositories.find(project => project.id === id);
 
   if (!project) {
-    return response.status(400).json({ error: 'Project not found.'});
+    return response.status(400).json({ error: 'Project not found.' });
   }
 
   project.likes++;
